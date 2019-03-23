@@ -10,7 +10,6 @@ import UIKit
 import UserNotifications
 
 class ViewController: UIViewController {
-    private let identifier = "id"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,13 +22,16 @@ class ViewController: UIViewController {
         let content = UNMutableNotificationContent()
         content.badge = 1
         content.body = "你已经很久没有来过了"
+        content.sound = UNNotificationSound.default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "local_push", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
     
     @objc private func willEnterForeground() {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 }
