@@ -31,7 +31,6 @@ class ViewController: UIViewController {
     
     @objc private func willEnterForeground() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
 }
