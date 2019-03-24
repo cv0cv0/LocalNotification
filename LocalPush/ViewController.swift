@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         content.badge = 1
         content.body = "你已经很久没有来过了"
         content.sound = UNNotificationSound.default
+        content.categoryIdentifier = "local_push"
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
         let request = UNNotificationRequest(identifier: "local_push", content: content, trigger: trigger)

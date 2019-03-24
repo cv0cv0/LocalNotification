@@ -10,8 +10,7 @@ import UIKit
 import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -40,10 +39,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.actionIdentifier == "i_know" {
+            UIApplication.shared.applicationIconBadgeNumber = 0
+        }
+        completionHandler()
+    }
 
     private func registerNotificationSettings() {
         UNUserNotificationCenter.current().requestAuthorization(options: [UNAuthorizationOptions.alert, UNAuthorizationOptions.badge, UNAuthorizationOptions.sound]) { success, _ in
-            if !success {
+            if success {
+                let action = UNNotificationAction(identifier: "i_know", title: "我知道了")
+                let category = UNNotificationCategory(identifier: "local_push", actions: [action], intentIdentifiers: [])
+                UNUserNotificationCenter.current().setNotificationCategories([category])
+                
+                UNUserNotificationCenter.current().delegate = self
+            } else {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             }
         }
